@@ -19,7 +19,7 @@
         <module>customer</module>
         <module>Product</module>
     </modules>
-    
+
     <properties>
         <spring-cloud-dependencies.version>2023.0.0</spring-cloud-dependencies.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
@@ -42,6 +42,7 @@
 
     <dependencies>
         <!-- manage all realate to links on REST resources-->
+        <!-- Webflux helps us to create clients -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
