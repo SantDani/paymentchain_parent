@@ -18,6 +18,7 @@
     <modules>
         <module>customer</module>
         <module>Product</module>
+        <module>transactions</module>
     </modules>
 
     <properties>
