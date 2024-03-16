@@ -6,6 +6,7 @@ package com.paymentchain.customer.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paymentchain.customer.entities.Customer;
+import com.paymentchain.customer.entities.CustomerProduct;
 import com.paymentchain.customer.repository.CustomerRepository;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.epoll.EpollChannelOption;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
@@ -88,8 +90,13 @@ public class CustomerRestController {
         Optional<Customer> optionalcustomer = customerRepository.findById(id);
         if (optionalcustomer.isPresent()) {
             Customer newcustomer = optionalcustomer.get();
-            newcustomer.setName(input.getName());
-            newcustomer.setPhone(input.getPhone());
+            newcustomer.update(
+                    input.getName(),
+                    input.getPhone(), 
+                    input.getCode(), 
+                    input.getIban(), 
+                    input.getSurname(), 
+                    input.getAddress());
             Customer save = customerRepository.save(newcustomer);
             return new ResponseEntity<>(save, HttpStatus.OK);
         } else {
@@ -111,7 +118,29 @@ public class CustomerRestController {
     }
     
     
-    private String getProductName(long id) { 
+   
+    
+    @GetMapping("/full")
+    public Customer getByCode(@RequestParam(name = "code") String code){
+        Customer customer = customerRepository.findByCode(code);
+        if(customer != null){
+            List<CustomerProduct> products = customer.getProducts();
+            
+            //for each product find it name
+            products.forEach(x -> {
+                String productName = getProductName(x.getProductId());
+                x.setProductName(productName);
+            });
+            
+            //find all transactions that belong this account number
+            List<?> transactions = getTransactions(customer.getIban());
+            customer.setTransactions(transactions);
+        }
+        
+        return customer;
+    }
+    
+     private String getProductName(long id) { 
         WebClient webClientBuilded = webClientBuilder.clientConnector(new ReactorClientHttpConnector(client))
                 .baseUrl("http://localhost:8081/product")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -123,5 +152,24 @@ public class CustomerRestController {
                 .retrieve().bodyToMono(JsonNode.class).block();
         String name = block.get("name").asText();
         return name;
+    }
+     
+    private List<?> getTransactions(String iban){
+        WebClient webClientBuilded = webClientBuilder.clientConnector(new ReactorClientHttpConnector(client))
+                .baseUrl("http://localhost:8082/transaction")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultUriVariables(Collections.singletonMap("url", "http://localhost:8083/product"))
+                .build();
+        
+        Optional<List<?>> transactionsOptional = Optional.ofNullable(webClientBuilded.method(HttpMethod.GET)
+            .uri(uriBuilder -> uriBuilder
+                    .pathSegment("customer", "transactions", "{iban}")
+                    .build(iban))
+            .retrieve()
+            .bodyToFlux(Object.class)
+            .collectList()
+            .block());   
+        
+        return transactionsOptional.orElse(Collections.emptyList());
     }
 }

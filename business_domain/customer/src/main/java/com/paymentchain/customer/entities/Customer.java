@@ -27,13 +27,22 @@ public class Customer {
     private long id;
     private String name;
     private String phone;
-    
+    private String code;
     private String iban;
     private String surname;
     private String address;
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CustomerProduct> products;
-    //@Transient
-    //private List<?> transactions;
+    @Transient
+    private List<?> transactions;
+    
+   public void update(String name,String phone,String code, String iban,String surname,String address){
+       this.name=name;
+       this.phone=phone;
+       this.code=code;
+       this.iban=iban;
+       this.surname=surname;
+       this.address=address;
+   }
 }
