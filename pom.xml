@@ -11,7 +11,7 @@
     <description>POM parent project for all spring boot projects</description>
     <modules>
         <module>business_domain</module>
-        <module>infraestructure_domain</module>
+        <module>infraestructure-domain</module>
     </modules>
 
     <properties>
