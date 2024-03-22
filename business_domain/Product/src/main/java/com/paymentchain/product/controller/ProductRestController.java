@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,9 +32,17 @@ public class ProductRestController {
 
     @Autowired
     ProductRepository productRepository;
+    
+    @Value("${user.role}")
+    private String role;
+    
+    @Value("${user.alias}")
+    private String alias;
 
     @GetMapping()
     public List<Product> list() {
+        System.out.println("role: " + role);
+        System.out.println("alias: " + alias);
         return productRepository.findAll();
     }
 

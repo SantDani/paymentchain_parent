@@ -142,9 +142,9 @@ public class CustomerRestController {
     
      private String getProductName(long id) { 
         WebClient webClientBuilded = webClientBuilder.clientConnector(new ReactorClientHttpConnector(client))
-                .baseUrl("http://localhost:8081/product")
+                .baseUrl("http://business-domain-product/product")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultUriVariables(Collections.singletonMap("url", "http://localhost:8083/product"))
+                .defaultUriVariables(Collections.singletonMap("url", "http://business-domain-product/product"))
                 .build();
         
         // Add id to endpoint
@@ -156,9 +156,9 @@ public class CustomerRestController {
      
     private List<?> getTransactions(String iban){
         WebClient webClientBuilded = webClientBuilder.clientConnector(new ReactorClientHttpConnector(client))
-                .baseUrl("http://localhost:8082/transaction")
+                .baseUrl("http://business-domain-transactions/transaction")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultUriVariables(Collections.singletonMap("url", "http://localhost:8083/product"))
+                .defaultUriVariables(Collections.singletonMap("url", "http://business-domain-transactions/product"))
                 .build();
         
         Optional<List<?>> transactionsOptional = Optional.ofNullable(webClientBuilded.method(HttpMethod.GET)
