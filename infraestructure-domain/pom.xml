@@ -17,6 +17,7 @@
     
     <modules>
         <module>eureka</module>
+        <module>admin-server</module>
     </modules>
     
     <properties>
