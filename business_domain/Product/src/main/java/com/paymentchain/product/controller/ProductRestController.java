@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,14 +34,16 @@ public class ProductRestController {
     @Autowired
     ProductRepository productRepository;
     
-    @Value("${user.role:defaultRole}")
-    private String role;
-    
-    @Value("${user.alias:defaultAlias}")
-    private String alias;
+
+    @Autowired
+    private Environment enviroment;
 
     @GetMapping()
     public List<Product> list() {
+        String env = enviroment.getProperty("architecture.app.environment");
+        String alias = enviroment.getProperty("user.alias");
+        String role = enviroment.getProperty("user.role");
+        System.out.println("env: " + env);
         System.out.println("role: " + role);
         System.out.println("alias: " + alias);
         return productRepository.findAll();

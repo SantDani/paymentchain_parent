@@ -110,8 +110,8 @@
                         <id>build-docker-image</id>
                         <phase>package</phase>
                         <goals>                                              
-                            <goal>build</goal>
-                           <goal>push</goal>
+                           <goal>build</goal>
+                           <!-- <goal>push</goal>-->
                         </goals>
                     </execution>
                 </executions>
@@ -121,6 +121,7 @@
                     <buildArgs>
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
 
