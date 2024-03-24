@@ -33,10 +33,10 @@ public class ProductRestController {
     @Autowired
     ProductRepository productRepository;
     
-    @Value("${user.role}")
+    @Value("${user.role:defaultRole}")
     private String role;
     
-    @Value("${user.alias}")
+    @Value("${user.alias:defaultAlias}")
     private String alias;
 
     @GetMapping()
