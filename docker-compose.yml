@@ -81,7 +81,7 @@ services:
         -Xms256M 
         -Xmx256M 
         -DEUREKA_SERVER=http://registry-discovery:8761/eureka/ 
-        -Dspring.profiles.active=dev
+        -Dspring.profiles.active=prd
     depends_on:
       - registry-discovery
       - configuration
@@ -116,7 +116,7 @@ services:
     volumes:
       #allow *.sql, *.sql.gz, or *.sh and is execute only if data directory is empty
       - ./dbfiles:/docker-entrypoint-initdb.d
-      - /var/lib/postgres_data:/var/lib/postgresql/data
+      #- /var/lib/postgres_data:/var/lib/postgresql/data
     environment:
       #default postgres super user
       POSTGRES_USER: postgres #default passwor for postgres super user, it is only the required envvar for postgres image
@@ -132,7 +132,7 @@ services:
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
-      PGADMIN_DEFAULT_PASSWORD: "qwerty"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
     ports:
       - 80:80
     depends_on:
