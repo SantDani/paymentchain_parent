@@ -36,8 +36,14 @@ public class TransactionRestController {
     
 
     @GetMapping()
-    public List<Transaction> list() {
-        return transactionRepository.findAll();
+    public ResponseEntity<List<Transaction>> list() {
+        List<Transaction> transactions = transactionRepository.findAll();
+        
+        if(transactions == null || transactions.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(transactions);
+
     }
 
     @GetMapping("/{id}")
@@ -76,7 +82,7 @@ public class TransactionRestController {
     @PostMapping
     public ResponseEntity<?> post(@RequestBody Transaction input) {
         Transaction save = transactionRepository.save(input);
-        return ResponseEntity.ok(save);
+        return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

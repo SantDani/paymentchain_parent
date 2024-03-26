@@ -39,14 +39,20 @@ public class ProductRestController {
     private Environment enviroment;
 
     @GetMapping()
-    public List<Product> list() {
+    public ResponseEntity<List<Product>> list() {
         String env = enviroment.getProperty("architecture.app.environment");
         String alias = enviroment.getProperty("user.alias");
         String role = enviroment.getProperty("user.role");
         System.out.println("env: " + env);
         System.out.println("role: " + role);
         System.out.println("alias: " + alias);
-        return productRepository.findAll();
+        
+        List<Product> products = productRepository.findAll();
+        
+        if(products == null || products.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")
@@ -76,7 +82,7 @@ public class ProductRestController {
     @PostMapping
     public ResponseEntity<?> post(@RequestBody Product input) {
         Product save = productRepository.save(input);
-        return ResponseEntity.ok(save);
+        return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
