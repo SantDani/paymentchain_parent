@@ -128,7 +128,7 @@ public class CustomerRestController {
     @GetMapping("/full")
     public Customer getByCode(@RequestParam(name = "code") String code){
         Customer customer = customerRepository.findByCode(code);
-        if(customer != null){
+        //if(customer != null){
             List<CustomerProduct> products = customer.getProducts();
             
             //for each product find it name
@@ -140,7 +140,7 @@ public class CustomerRestController {
             //find all transactions that belong this account number
             List<?> transactions = getTransactions(customer.getIban());
             customer.setTransactions(transactions);
-        }
+        //}
         
         return customer;
     }
