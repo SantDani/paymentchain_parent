@@ -28,7 +28,7 @@ services:
         -Xms256M 
         -Xmx256M 
         -DEUREKA_SERVER=http://registry-discovery:8761/eureka/ 
-        -DLOCAL_REPOSITORY=/tmp/config-server-repo 
+        -DLOCAL_REPOSITORY=https://github.com/SantDani/service-configuration
         #-Dspring.cloud.config.server.native.searchLocations=/var/config-data
     depends_on:
       - registry-discovery
@@ -86,7 +86,7 @@ services:
       - registry-discovery
       - configuration
     ports:
-      - 8081:8081
+      - 8080:8080
 
   ##########################################################################     
   #transaction service
