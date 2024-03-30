@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Represents a standardized approach to REST API error reporting, supported by the <b>Internet Engineering Task Force (IETF)</b>,
- * an open standard organization that develops and promotes voluntary internet standards. This approach is defined in <b>RFC 7807</b>,
+ * an open standard organization that develops and promotes voluntary internet standards. This approach is defined in <b>RFC 7807</b> (https://datatracker.ietf.org/doc/html/rfc7807),
  * which introduces a generalized error-handling schema comprising five key components:
  * <ol>
  *   <li><b>type</b> - A URI identifier that categorizes the error.</li>
@@ -19,7 +19,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * </ol>
  * This schema aims to standardize error reporting across REST APIs, making it easier for client applications to understand and handle errors
  * in a consistent manner.
- *
  * @author SantiagoSRP
  */
 public class StandardizedApiExeptionResponse {
