@@ -63,12 +63,12 @@ services:
         -Xms256M 
         -Xmx256M 
         -DEUREKA_SERVER=http://registry-discovery:8761/eureka/ 
-        -Dspring.profiles.active=dev
+        -Dspring.profiles.active=prd
     depends_on:
       - registry-discovery
       - configuration
     ports:
-      - 8083:8083
+      - 8081:8081
 
   ##########################################################################     
   #customer service
@@ -99,7 +99,7 @@ services:
         -Xms256M 
         -Xmx256M 
         -DEUREKA_SERVER=http://registry-discovery:8761/eureka/ 
-        -Dspring.profiles.active=dev
+        -Dspring.profiles.active=prd
     depends_on:
       - registry-discovery
       - configuration
@@ -119,7 +119,8 @@ services:
       #- /var/lib/postgres_data:/var/lib/postgresql/data
     environment:
       #default postgres super user
-      POSTGRES_USER: postgres #default passwor for postgres super user, it is only the required envvar for postgres image
+      POSTGRES_USER: postgres 
+      #default passwor for postgres super user, it is only the required envvar for postgres image
       POSTGRES_PASSWORD: qwerty
       #main database if name is not specific thname of super user is use
       POSTGRES_DB: postgres

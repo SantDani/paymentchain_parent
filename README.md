@@ -28,3 +28,7 @@ docker-compose stop
 ```shell
 docker-compose up -d --force-recreate
 ```
+
+psql -h localhost -p 5432 -U postgres -d postgres -W
+
+\dn+ public
