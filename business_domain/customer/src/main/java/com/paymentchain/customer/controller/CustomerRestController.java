@@ -4,9 +4,11 @@
  */
 package com.paymentchain.customer.controller;
 
-import com.paymentchain.customer.bussines.transactions.BussinesTransaction;
+import com.paymentchain.customer.bussines.transactions.BusinessTransaction;
 import com.paymentchain.customer.entities.Customer;
+import com.paymentchain.customer.exception.BusinessRuleException;
 import com.paymentchain.customer.repository.CustomerRepository;
+import java.net.UnknownHostException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
@@ -34,7 +36,7 @@ public class CustomerRestController {
     CustomerRepository customerRepository;
     
     @Autowired
-    BussinesTransaction bussinesTransaction;
+    BusinessTransaction businessTransaction;
     
     @GetMapping()
     public ResponseEntity<List<Customer>> list() {
@@ -77,8 +79,8 @@ public class CustomerRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> post(@RequestBody Customer input) {
-        Customer save = bussinesTransaction.save(input);
+    public ResponseEntity<?> post(@RequestBody Customer input) throws BusinessRuleException, UnknownHostException{
+        Customer save = businessTransaction.save(input);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
 
@@ -89,7 +91,7 @@ public class CustomerRestController {
     }
      
     @GetMapping("/full")
-    public Customer getByCode(@RequestParam(name = "code") String code){
-        return bussinesTransaction.getByCode(code);
+    public Customer getByCode(@RequestParam(name = "code") String code) throws UnknownHostException{
+        return businessTransaction.getByCode(code);
     }
 }
