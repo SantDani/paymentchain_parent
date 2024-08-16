@@ -1,0 +1,46 @@
+server:
+  port: 8888 # Port on which the config server will run
+
+spring:
+  application:
+    name: config-server # Name of the Spring application
+
+  cloud:
+    config:
+      server:
+        git:
+          # URI of the Git repository where the configuration files are stored
+          # Uses a local repository if LOCAL_REPOSITORY is set, otherwise defaults to the GitHub URL
+          uri: ${LOCAL_REPOSITORY:https://github.com/SantDani/service-configuration}
+          clone-on-start: true # Clone the Git repository on startup
+          default-label: master # Default branch to be used for fetching configurations
+
+  security:
+    user:
+      name: admin # Username for basic authentication
+      password: qwerty # Password for basic authentication
+
+logging:
+  level:
+    org.springframework.cloud: DEBUG # Set the logging level for Spring Cloud components to DEBUG
+
+--- #configuration for eureka client
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    metadata-map:
+      startup: ${random.int} #needed to trigger info and endpoint update after restart
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+--- #As with Spring Boot 2 most of the endpoints aren’t exposed via http by default, we expose all of them. For production you should carefully choose which endpoints to expose
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
