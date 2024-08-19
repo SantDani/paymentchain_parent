@@ -18,6 +18,8 @@
     <modules>
         <module>eureka</module>
         <module>admin-server</module>
+        <module>apigateway</module>
+        <module>configserver</module>
     </modules>
     
     <properties>
