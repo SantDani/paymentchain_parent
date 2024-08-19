@@ -2,11 +2,34 @@ spring:
   cloud:
     gateway:
       routes:
+        # Define a route with the ID 'customer_service'
         - id: customer_service
-          uri: http://localhost:8080
+          # The URI to which the request should be forwarded. 'lb' stands for load balancer.
+          uri: lb://business-domain-customer
+          # Define the conditions under which this route should be matched
           predicates:
-            - Path=/customer/**
+            # Match any request
+            - Path=/**
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    metadata-map:
+      startup: ${random.int} # needed to trigger info and endpoint update after restart
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+
+--- # self configuration
+server:
+  port: 8079
+
+spring:
+  application:
+    name: apigateway

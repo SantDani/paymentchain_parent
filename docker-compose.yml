@@ -85,8 +85,9 @@ services:
     depends_on:
       - registry-discovery
       - configuration
-    ports:
-      - 8080:8080
+    ## remove customer ports so that they are only accessible from the API Gateway
+    ## The customer port assignment is handled dynamically by Eureka during service registration.
+
 
   ##########################################################################     
   #transaction service
@@ -105,6 +106,25 @@ services:
       - configuration
     ports:
       - 8082:8082
+
+
+  ##########################################################################     
+  #apigateway service
+  ##########################################################################  
+  apigateway:
+    container_name: id-apigateway
+    image: digitalthinking/microservice-docker-apigateway:0.0.1-SNAPSHOT
+    environment:
+      - JAVA_OPTS= 
+        -Xms256M 
+        -Xmx256M 
+        -DEUREKA_SERVER=http://registry-discovery:8761/eureka/ 
+        -Dspring.profiles.active=prd
+    depends_on:
+      - registry-discovery
+      - configuration
+    ports:
+      - 8079:8079
   ##########################################################################     
   #database service
   ##########################################################################       
